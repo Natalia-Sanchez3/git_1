@@ -76,4 +76,66 @@ survey_USD%>%distinct(industry)
 
 # how many under each industry
 
-survey_USD%>%count(industry,sort=TRUE)
+survey_USD%>%count(industry,gender,sort=TRUE)
+
+#how many responses from each age category and gender
+
+
+survey_USD%>%count(
+  how_old_are_you,
+  gender,
+  sort=TRUE
+  )
+
+#group by
+
+#calculate avr_salary for gender in each industry
+
+survey_USD_grouped<-survey_USD%>%
+  group_by(gender,
+           industry)%>%
+  mutate(
+    avr_salary=mean(annual_salary),
+    min_salary=min(annual_salary),
+    max_salary=max(annual_salary)
+         )%>%
+  ungroup()
+
+
+
+  #mutate () create a new variable
+
+survey_USD_avr<-survey_USD%>%
+  mutate(
+    avr_salary=mean(annual_salary)
+    )
+
+#transmute
+
+survey_total<-
+  survey_USD%>%
+  transmute(
+    total_salary=annual_salary+as.numeric(other_monetary_comp),
+    min_salary=min(annual_salary)
+  )
+
+#summarise
+
+survey_USD_summarise<-survey_USD%>%
+  group_by(gender,
+           industry)%>%
+  summarise(
+    avr_salary=mean(annual_salary),
+    min_salary=min(annual_salary),
+    max_salary=max(annual_salary)
+  )%>%
+  ungroup()
+  
+#parse_number
+
+#as.numeric
+
+survey_USD%>%
+  parse_number(how_old_are_you)
+
+#case_when
